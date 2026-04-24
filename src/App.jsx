@@ -174,6 +174,7 @@ function LandingPortal({ onStart }) {
 
 export default function App() {
   const [appState, setAppState] = useState('landing'); // 'landing', 'booting', 'lobby'
+  console.log("App Rendering, state:", appState);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
@@ -194,19 +195,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-yellow-400 selection:text-black">
-      <AnimatePresence mode="wait">
-        {appState === 'landing' && (
-          <LandingPortal key="landing" onStart={() => setAppState('booting')} />
-        )}
-        {appState === 'booting' && (
-          <StartupSequence key="booting" onComplete={() => setAppState('lobby')} />
-        )}
-      </AnimatePresence>
+      {appState === 'landing' && (
+        <LandingPortal onStart={() => setAppState('booting')} />
+      )}
+      {appState === 'booting' && (
+        <StartupSequence onComplete={() => setAppState('lobby')} />
+      )}
 
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: appState === 'lobby' ? 1 : 0 }}
-        className="flex flex-col min-h-screen"
+      <div 
+        className={`flex flex-col min-h-screen transition-opacity duration-500 ${appState === 'lobby' ? 'opacity-100' : 'opacity-0'}`}
         style={{ pointerEvents: appState === 'lobby' ? 'auto' : 'none' }}
       >
         {/* Navigation */}
@@ -406,7 +403,7 @@ export default function App() {
           </div>
         </div>
       </footer>
-      </motion.div>
+      </div>
     </div>
   );
 }
