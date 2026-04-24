@@ -377,7 +377,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-8 mb-12">
           <div className="space-y-4">
              <h2 className="font-display text-3xl uppercase italic tracking-tighter">Nexus <span className="text-yellow-400">Labs</span></h2>
-             <p className="text-white/40 max-sm text-sm">Providing the fastest, cleanest, and most reliable gaming experience. Optimized for performance and privacy.</p>
+             <p className="text-white/40 max-w-sm text-sm">Providing the fastest, cleanest, and most reliable gaming experience. Optimized for performance and privacy.</p>
           </div>
           <div className="grid grid-cols-2 gap-12">
             <div className="space-y-4">
