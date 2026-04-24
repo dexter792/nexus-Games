@@ -3,12 +3,177 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useMemo } from 'react';
-import { Search, Gamepad2, Trophy, Zap, X, Maximize2 } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { Search, Gamepad2, Trophy, Zap, X, Maximize2, ShieldCheck, Cpu, Network, Terminal } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import gamesData from './data/games.json';
 
+function StartupSequence({ onComplete }) {
+  const [logs, setLogs] = useState([]);
+  const [progress, setProgress] = useState(0);
+
+  const messages = [
+    "INITIALIZING NEXUS_CORE...",
+    "ESTABLISHING SECURE TUNNEL...",
+    "SCANNING GAME_GRID ASSETS...",
+    "BYPASSING FIREWALL_V4...",
+    "OPTIMIZING RENDER_PIPELINE...",
+    "SYSTEM READY."
+  ];
+
+  useEffect(() => {
+    let currentMsg = 0;
+    const interval = setInterval(() => {
+      if (currentMsg < messages.length) {
+        setLogs(prev => [...prev, messages[currentMsg]]);
+        setProgress(prev => Math.min(prev + 20, 100));
+        currentMsg++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 400);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="fixed inset-0 bg-[#080808] flex items-center justify-center p-6 z-[100] font-mono">
+      <div className="max-w-md w-full space-y-8">
+        <div className="flex flex-col items-center gap-4 mb-12">
+          <div className="bg-yellow-400 p-3 rotate-12 shadow-[4px_4px_0_#fff]">
+            <Terminal className="text-black" size={32} />
+          </div>
+          <h1 className="font-display text-4xl uppercase tracking-tighter italic text-white text-center">Nexus Labs</h1>
+        </div>
+
+        <div className="bg-white/5 border-2 border-white/10 p-4 rounded-sm space-y-2 h-48 overflow-hidden relative">
+          {logs.map((log, i) => (
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, x: -10 }} 
+              animate={{ opacity: 1, x: 0 }}
+              className="text-xs flex items-center gap-2"
+            >
+              <span className="text-yellow-400">{">"}</span>
+              <span className="text-white/60">{log}</span>
+            </motion.div>
+          ))}
+          <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[#111] to-transparent"></div>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest text-white/40">
+            <span>Security protocols active</span>
+            <span>{progress}%</span>
+          </div>
+          <div className="h-1 bg-white/10 w-full rounded-full overflow-hidden">
+            <motion.div 
+              className="h-full bg-yellow-400"
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        {progress === 100 && (
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            onClick={onComplete}
+            className="w-full bg-white text-black font-bold py-4 rounded-sm hover:bg-yellow-400 transition-colors uppercase tracking-widest text-sm shadow-[6px_6px_0_rgba(255,255,255,0.2)] hover:shadow-[6px_6px_0_#000] active:translate-x-1 active:translate-y-1 active:shadow-none"
+          >
+            Enter Game Grid
+          </motion.button>
+        )}
+
+        <div className="grid grid-cols-3 gap-4 pt-8 border-t border-white/5">
+          <div className="flex flex-col items-center gap-1 opacity-20">
+            <ShieldCheck size={14} />
+            <span className="text-[8px] uppercase font-bold">Encrypted</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 opacity-20">
+            <Cpu size={14} />
+            <span className="text-[8px] uppercase font-bold">High Perf</span>
+          </div>
+          <div className="flex flex-col items-center gap-1 opacity-20">
+            <Network size={14} />
+            <span className="text-[8px] uppercase font-bold">Direct Link</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function LandingPortal({ onStart }) {
+  return (
+    <div className="fixed inset-0 bg-[#050505] z-[200] overflow-hidden flex flex-col items-center justify-center font-sans px-4">
+      {/* Background Noise/Grid */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-10 text-center max-w-4xl"
+      >
+        <motion.span 
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="inline-block bg-yellow-400 text-black px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.3em] mb-6"
+        >
+          System v2.4.0 Deployment
+        </motion.span>
+        
+        <h1 className="text-7xl md:text-[120px] font-display uppercase italic leading-none tracking-tighter mb-8 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent select-none">
+          Nexus<br />Games
+        </h1>
+
+        <p className="text-white/60 text-lg md:text-xl font-medium max-w-xl mx-auto mb-12">
+          Experience low-latency, high-performance gaming directly in your browser. 
+          Bypassing restrictions since 2024. No downloads. Just action.
+        </p>
+
+        <div className="flex flex-col items-center justify-center gap-10">
+          <button 
+            onClick={onStart}
+            className="group relative px-12 py-5 bg-white text-black font-bold text-xl uppercase tracking-wider skew-x-[-15deg] transition-all hover:bg-yellow-400 hover:scale-105 active:scale-95 shadow-[10px_10px_0_rgba(250,204,21,0.2)]"
+          >
+            <span className="inline-block skew-x-[15deg] flex items-center gap-3">
+              Initiate Grid <Zap size={24} fill="currentColor" />
+            </span>
+          </button>
+
+          <div className="flex flex-wrap items-center justify-center gap-8 font-mono text-[10px] tracking-widest text-white/30 uppercase font-bold">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_#22c55e]"></div>
+              Proxy Online
+            </div>
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={14} className="text-blue-400" />
+              AES-256 Valid
+            </div>
+            <div>v4.1.14 Stable</div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Frame Decorations */}
+      <div className="absolute top-10 left-10 w-32 h-32 border-l-2 border-t-2 border-white/5 -rotate-12 pointer-events-none"></div>
+      <div className="absolute bottom-10 right-10 w-48 h-48 border-r-2 border-b-2 border-white/5 rotate-12 pointer-events-none"></div>
+      
+      {/* HUD Elements */}
+      <div className="absolute top-10 right-10 flex flex-col items-end gap-1 font-mono text-[9px] text-white/20 uppercase tracking-tighter pointer-events-none">
+        <span>LATENCY: 0.02ms</span>
+        <span>UPTIME: 100%</span>
+        <span>LOAD: 12%</span>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
+  const [appState, setAppState] = useState('landing'); // 'landing', 'booting', 'lobby'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
@@ -29,8 +194,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-yellow-400 selection:text-black">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 bg-[#080808]/80 backdrop-blur-md border-b-2 border-white/10 px-4 py-4 md:px-8">
+      <AnimatePresence mode="wait">
+        {appState === 'landing' && (
+          <LandingPortal key="landing" onStart={() => setAppState('booting')} />
+        )}
+        {appState === 'booting' && (
+          <StartupSequence key="booting" onComplete={() => setAppState('lobby')} />
+        )}
+      </AnimatePresence>
+
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: appState === 'lobby' ? 1 : 0 }}
+        className="flex flex-col min-h-screen"
+        style={{ pointerEvents: appState === 'lobby' ? 'auto' : 'none' }}
+      >
+        {/* Navigation */}
+        <nav className="sticky top-0 z-50 bg-[#080808]/80 backdrop-blur-md border-b-2 border-white/10 px-4 py-4 md:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => {setActiveGame(null); setSelectedCategory(null);}}>
             <div className="bg-yellow-400 p-1 rounded-sm rotate-3">
@@ -226,6 +406,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+      </motion.div>
     </div>
   );
 }
