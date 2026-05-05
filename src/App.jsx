@@ -5,8 +5,10 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Search, Gamepad2, Trophy, Zap, X, Maximize2, ShieldCheck, Cpu, Network, Terminal } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import gamesData from './data/games.json';
+import { motion, AnimatePresence } from 'framer-motion';
+import gamesDataRaw from './data/games.json';
+
+const gamesData = Array.isArray(gamesDataRaw) ? gamesDataRaw : [];
 
 function StartupSequence({ onComplete }) {
   const [logs, setLogs] = useState([]);
@@ -174,24 +176,19 @@ function LandingPortal({ onStart }) {
 }
 
 export default function App() {
-  const [appState, setAppState] = useState(() => {
-    return localStorage.getItem('nexus_visited') ? 'lobby' : 'landing';
-  }); 
+  const [appState, setAppState] = useState('landing'); // 'landing', 'booting', 'lobby'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
 
-  const setVisited = () => {
-    localStorage.setItem('nexus_visited', 'true');
-    setAppState('booting');
-  };
-
   const categories = useMemo(() => {
+    if (!gamesData || !Array.isArray(gamesData)) return [];
     const cats = gamesData.map(g => g.category);
     return Array.from(new Set(cats));
   }, []);
 
   const filteredGames = useMemo(() => {
+    if (!gamesData || !Array.isArray(gamesData)) return [];
     return gamesData.filter(game => {
       const matchesSearch = game.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                             game.description.toLowerCase().includes(searchQuery.toLowerCase());
