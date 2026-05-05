@@ -296,11 +296,11 @@ export default function App() {
                 <div className="flex-1 space-y-6 z-10">
                   <div className="space-y-1">
                     <span className="text-yellow-400 font-mono text-sm tracking-widest uppercase font-bold">Trending Now</span>
-                    <h2 className="text-5xl md:text-7xl font-display leading-[0.85] uppercase italic">Slope Infinite</h2>
+                  <h2 className="text-5xl md:text-7xl font-display leading-[0.85] uppercase italic">{gamesData[0]?.name || "Nexus Featured"}</h2>
                   </div>
-                  <p className="text-xl text-white/60 max-w-lg">The world's most addictive infinite runner just hit Nexus. Dodge obstacles, collect speed boosts, and survive the drop.</p>
+                  <p className="text-xl text-white/60 max-w-lg">{gamesData[0]?.description || "Experience high-performance gaming directly in your browser. Bypassing restrictions since 2024."}</p>
                   <button 
-                    onClick={() => setActiveGame(gamesData.find(g => g.id === 'slope'))}
+                    onClick={() => setActiveGame(gamesData[0])}
                     className="bg-white text-black px-10 py-4 font-bold text-lg uppercase skew-x-[-12deg] hover:bg-yellow-400 hover:scale-105 transition-all"
                   >
                     <span className="inline-block skew-x-[12deg]">Play Now</span>

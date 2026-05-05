@@ -1,50 +1,10 @@
 [
   {
-    "id": "2048",
-    "name": "2048",
-    "description": "Join the numbers and get to the 2048 tile!",
-    "thumbnail": "https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=400&h=300&auto=format&fit=crop",
-    "iframeUrl": "https://play2048.co/",
-    "category": "Puzzle"
-  },
-  {
-    "id": "tetris",
-    "name": "Tetris",
-    "description": "The classic block-stacking puzzle game.",
-    "thumbnail": "https://images.unsplash.com/photo-1550745127-d0d34600ff51?q=80&w=400&h=300&auto=format&fit=crop",
-    "iframeUrl": "https://tetris.com/play-tetris",
-    "category": "Classic"
-  },
-  {
-    "id": "snake",
-    "name": "Snake",
-    "description": "Eat the apples and grow as long as possible.",
-    "thumbnail": "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?q=80&w=400&h=300&auto=format&fit=crop",
-    "iframeUrl": "https://www.google.com/logos/2010/pacman10-i.html",
-    "category": "Arcade"
-  },
-  {
-    "id": "pacman",
-    "name": "Pac-Man",
-    "description": "Classic arcade maze game.",
-    "thumbnail": "https://images.unsplash.com/photo-1550745127-28ca73ad1734?q=80&w=400&h=300&auto=format&fit=crop",
-    "iframeUrl": "https://macek.github.io/google_pacman/",
-    "category": "Arcade"
-  },
-  {
-    "id": "flappy-bird",
-    "name": "Flappy Bird",
-    "description": "Flap your wings to fly through the pipes.",
-    "thumbnail": "https://images.unsplash.com/photo-1616440963970-eebd00698730?q=80&w=400&h=300&auto=format&fit=crop",
-    "iframeUrl": "https://flappybird.io/",
-    "category": "Arcade"
-  },
-  {
-    "id": "slope",
-    "name": "Slope",
-    "description": "Roll down the slope for as long as possible.",
-    "thumbnail": "https://images.unsplash.com/photo-1614332287897-cdc485fa562d?q=80&w=400&h=300&auto=format&fit=crop",
-    "iframeUrl": "https://kbhgames.com/game/slope",
-    "category": "Running"
+    "id": "gladihoppers",
+    "name": "Gladihoppers",
+    "description": "Physics-based 2D gladiator fighting game where you hop around and smash heads.",
+    "thumbnail": "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=400&h=300&auto=format&fit=crop",
+    "iframeUrl": "https://classroomjq.github.io/gladihoppers/",
+    "category": "Action"
   }
 ]
