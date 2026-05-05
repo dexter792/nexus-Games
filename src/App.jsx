@@ -28,16 +28,16 @@ function StartupSequence({ onComplete }) {
     let timer;
     const interval = setInterval(() => {
       if (currentMsg < messages.length) {
-        setLogs(prev => [...prev.slice(-10), messages[currentMsg]]); // Keep only recent logs
+        setLogs(prev => [...prev.slice(-8), messages[currentMsg]]);
         setProgress(Math.round(((currentMsg + 1) / messages.length) * 100));
         currentMsg++;
       } else {
         clearInterval(interval);
         timer = setTimeout(() => {
           if (onComplete) onComplete();
-        }, 500);
+        }, 50);
       }
-    }, 150);
+    }, 5); // Near-instant 5ms cycles for "Core" loading
 
     return () => {
       clearInterval(interval);
@@ -46,13 +46,17 @@ function StartupSequence({ onComplete }) {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-[#080808] flex items-center justify-center p-6 z-[100] font-mono">
-      <div className="max-w-md w-full space-y-8">
-        <div className="flex flex-col items-center gap-4 mb-12">
+    <div 
+      className="fixed inset-0 bg-[#080808] flex items-center justify-center p-6 z-[100] font-mono cursor-pointer"
+      onClick={onComplete} // Allow skipping
+    >
+      <div className="max-w-md w-full space-y-8 pointer-events-none">
+        <div className="flex flex-col items-center gap-4 mb-4">
           <div className="bg-yellow-400 p-3 rotate-12 shadow-[4px_4px_0_#fff]">
             <Terminal className="text-black" size={32} />
           </div>
           <h1 className="font-display text-4xl uppercase tracking-tighter italic text-white text-center">Nexus Labs</h1>
+          <span className="text-[10px] text-white/20 animate-pulse uppercase tracking-[0.3em]">Click to Bypass</span>
         </div>
 
         <div className="bg-white/5 border-2 border-white/10 p-4 rounded-sm space-y-2 h-48 overflow-hidden relative">
@@ -182,7 +186,19 @@ function LandingPortal({ onStart }) {
 }
 
 export default function App() {
-  const [appState, setAppState] = useState('landing');
+  const [appState, setAppState] = useState(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('nexus_returning_user')) {
+      return 'lobby';
+    }
+    return 'landing';
+  });
+
+  useEffect(() => {
+    if (appState === 'lobby') {
+      localStorage.setItem('nexus_returning_user', 'true');
+    }
+  }, [appState]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
