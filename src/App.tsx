@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Search, Gamepad2, Trophy, Zap, X, Maximize2, ShieldCheck, Cpu, Network, Terminal } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import gamesDataRaw from './data/games.json';
 
 const gamesData = Array.isArray(gamesDataRaw) ? gamesDataRaw : [];
