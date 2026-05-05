@@ -10,6 +10,27 @@ export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
+    esbuild: {
+      loader: 'jsx',
+      include: /src\/.*\.jsx?$/,
+      exclude: [],
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        loader: {
+          '.js': 'jsx',
+        },
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: 'assets/main.js',
+          chunkFileNames: 'assets/[name].js',
+          assetFileNames: 'assets/[name].[ext]',
+        },
+      },
+    },
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
