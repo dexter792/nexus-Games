@@ -36,7 +36,6 @@ export default defineConfig(({mode}) => {
     },
     resolve: {
       alias: {
-        '/static/js/main.js': path.resolve(__dirname, 'src/main.js'),
         '@': path.resolve(__dirname, '.'),
       },
     },
