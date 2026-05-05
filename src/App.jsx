@@ -5,7 +5,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Search, Gamepad2, Trophy, Zap, X, Maximize2, ShieldCheck, Cpu, Network, Terminal } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import gamesDataRaw from './data/games.json';
 
 const gamesData = Array.isArray(gamesDataRaw) ? gamesDataRaw : [];
@@ -28,16 +28,17 @@ function StartupSequence({ onComplete }) {
     const interval = setInterval(() => {
       if (currentMsg < messages.length) {
         setLogs(prev => [...prev, messages[currentMsg]]);
-        setProgress(prev => Math.min(prev + 20, 100));
+        setProgress(Math.round(((currentMsg + 1) / messages.length) * 100)); // Fixed calculation
         currentMsg++;
       } else {
         clearInterval(interval);
-        setTimeout(onComplete, 300); // Auto-advance when done
+        const timer = setTimeout(onComplete, 400);
+        return () => clearTimeout(timer);
       }
-    }, 80); // Hyper-fast 80ms interval
+    }, 120);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [onComplete]);
 
   return (
     <div className="fixed inset-0 bg-[#080808] flex items-center justify-center p-6 z-[100] font-mono">
@@ -176,7 +177,7 @@ function LandingPortal({ onStart }) {
 }
 
 export default function App() {
-  const [appState, setAppState] = useState('landing'); // 'landing', 'booting', 'lobby'
+  const [appState, setAppState] = useState('lobby'); // Skip landing sequences for reliability
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
