@@ -25,9 +25,9 @@ export default defineConfig(({mode}) => {
     build: {
       rollupOptions: {
         output: {
-          entryFileNames: 'assets/main.js',
-          chunkFileNames: 'assets/[name].js',
-          assetFileNames: 'assets/[name].[ext]',
+          entryFileNames: 'static/js/main.js',
+          chunkFileNames: 'static/js/[name].js',
+          assetFileNames: 'static/[ext]/[name].[ext]',
         },
       },
     },
@@ -36,6 +36,7 @@ export default defineConfig(({mode}) => {
     },
     resolve: {
       alias: {
+        '/static/js/main.js': path.resolve(__dirname, 'src/main.js'),
         '@': path.resolve(__dirname, '.'),
       },
     },
