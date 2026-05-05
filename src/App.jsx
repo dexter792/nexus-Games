@@ -5,7 +5,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import { Search, Gamepad2, Trophy, Zap, X, Maximize2, ShieldCheck, Cpu, Network, Terminal } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import gamesDataRaw from './data/games.json';
 
 const gamesData = Array.isArray(gamesDataRaw) ? gamesDataRaw : [];
@@ -25,19 +25,24 @@ function StartupSequence({ onComplete }) {
 
   useEffect(() => {
     let currentMsg = 0;
+    let timer;
     const interval = setInterval(() => {
       if (currentMsg < messages.length) {
-        setLogs(prev => [...prev, messages[currentMsg]]);
-        setProgress(Math.round(((currentMsg + 1) / messages.length) * 100)); // Fixed calculation
+        setLogs(prev => [...prev.slice(-10), messages[currentMsg]]); // Keep only recent logs
+        setProgress(Math.round(((currentMsg + 1) / messages.length) * 100));
         currentMsg++;
       } else {
         clearInterval(interval);
-        const timer = setTimeout(onComplete, 400);
-        return () => clearTimeout(timer);
+        timer = setTimeout(() => {
+          if (onComplete) onComplete();
+        }, 500);
       }
-    }, 120);
+    }, 150);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      if (timer) clearTimeout(timer);
+    };
   }, [onComplete]);
 
   return (
@@ -177,10 +182,13 @@ function LandingPortal({ onStart }) {
 }
 
 export default function App() {
-  const [appState, setAppState] = useState('lobby'); // Skip landing sequences for reliability
+  const [appState, setAppState] = useState('landing');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
+
+  const handleStart = useMemo(() => () => setAppState('booting'), []);
+  const handleBootComplete = useMemo(() => () => setAppState('lobby'), []);
 
   const categories = useMemo(() => {
     if (!gamesData || !Array.isArray(gamesData)) return [];
@@ -201,10 +209,10 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col font-sans selection:bg-yellow-400 selection:text-black">
       {appState === 'landing' && (
-        <LandingPortal onStart={() => setAppState('booting')} />
+        <LandingPortal onStart={handleStart} />
       )}
       {appState === 'booting' && (
-        <StartupSequence onComplete={() => setAppState('lobby')} />
+        <StartupSequence onComplete={handleBootComplete} />
       )}
 
       <div 
