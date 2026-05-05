@@ -30,8 +30,9 @@ function StartupSequence({ onComplete }) {
         currentMsg++;
       } else {
         clearInterval(interval);
+        setTimeout(onComplete, 300); // Auto-advance when done
       }
-    }, 400);
+    }, 80); // Hyper-fast 80ms interval
 
     return () => clearInterval(interval);
   }, []);
@@ -173,11 +174,17 @@ function LandingPortal({ onStart }) {
 }
 
 export default function App() {
-  const [appState, setAppState] = useState('landing'); // 'landing', 'booting', 'lobby'
-  console.log("App Rendering, state:", appState);
+  const [appState, setAppState] = useState(() => {
+    return localStorage.getItem('nexus_visited') ? 'lobby' : 'landing';
+  }); 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [activeGame, setActiveGame] = useState(null);
+
+  const setVisited = () => {
+    localStorage.setItem('nexus_visited', 'true');
+    setAppState('booting');
+  };
 
   const categories = useMemo(() => {
     const cats = gamesData.map(g => g.category);
@@ -346,6 +353,7 @@ export default function App() {
                         alt={game.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0 opacity-70 group-hover:opacity-100"
                         referrerPolicy="no-referrer"
+                        loading="lazy"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
                         <button className="w-full bg-white text-black font-bold py-2 rounded-sm uppercase text-xs scale-90 group-hover:scale-100 transition-transform">
